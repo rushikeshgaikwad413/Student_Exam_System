@@ -2,9 +2,7 @@ package com.student.StudentManagemenetSystem.Controller;
 
 import com.student.StudentManagemenetSystem.Dto.StudentDto;
 import com.student.StudentManagemenetSystem.Exception.*;
-import com.student.StudentManagemenetSystem.Response.StudentResponse;
-import com.student.StudentManagemenetSystem.Response.StudentResponseE;
-import com.student.StudentManagemenetSystem.Response.StudentUpdateResponse;
+import com.student.StudentManagemenetSystem.Response.*;
 import com.student.StudentManagemenetSystem.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,15 +31,29 @@ public class StudentController {
     @GetMapping("/getByid")
     public ResponseEntity<?> getStudentById (@RequestParam int id){
         try {
-            StudentResponse studentResponse = new StudentResponse("Successful");
-            studentResponse.setResponse(String.valueOf(studentService.getUserbyId(id)));
-            return ResponseEntity.status(HttpStatus.OK).body(studentResponse);
+            StudentResponse1 studentResponse1 = new StudentResponse1("Successful");
+            studentResponse1.setResponse(studentService.getUserbyId(id));
+            return ResponseEntity.status(HttpStatus.OK).body(studentResponse1);
         } catch (studentNotFoundByIdException e) {
             StudentResponse studentResponse = new StudentResponse("unsuccess");
             studentResponse.setException(String.valueOf(e));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(studentResponse);
         }
     }
+
+//    @GetMapping("/getUserbyId")
+//    public ResponseEntity<?> getStudentById (@RequestParam int id){
+//        try {
+//            StudentResponse1 studentResponse1 =  new StudentResponse1("successful");
+//            studentResponse1.setResponse(studentService.getUserbyId(id));
+//            return ResponseEntity.status(HttpStatus.OK).body(studentResponse1);
+//        } catch (UserNotFoundbyIdException e) {
+//            StudentResponse2 studentResponse2 = new StudentResponse2("Unsucessfull");
+//            studentResponse2.setException(String.valueOf(e));
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(studentResponse2);
+//        }
+//    }
+
 
     @DeleteMapping("/deleteStudent")
     public ResponseEntity<?> deleteStudent(@RequestParam int id){
@@ -77,7 +89,7 @@ public class StudentController {
             studentResponseE.setResponse(studentService.getStudentByEmail(email));
             return ResponseEntity.status(HttpStatus.OK).body(studentResponseE);
         }catch (emailNotExistException e){
-            StudentResponseE studentResponseE = new StudentResponseE("unseccessful");
+            StudentResponseE studentResponseE = new StudentResponseE("unsuccessful");
             studentResponseE.setException(String.valueOf(e));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(studentResponseE);
         }
