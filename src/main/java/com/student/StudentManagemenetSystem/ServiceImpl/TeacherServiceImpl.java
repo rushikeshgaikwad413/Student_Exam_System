@@ -68,7 +68,7 @@ public class TeacherServiceImpl implements TeacherService {
         }
 
         if (teacherDto.getEmail() != null){
-            byId.setName(teacherDto.getName());
+            byId.setEmail(teacherDto.getEmail());
         }
 
         if (teacherDto.getSub() !=null){

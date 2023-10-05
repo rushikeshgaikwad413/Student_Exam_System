@@ -8,21 +8,13 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class StudentResponse {
+
+public class StudentResponse1 {
 
     private String status;
     private StudentDto response;
-    private String exception;
 
-
-    public StudentResponse(String status) {
+    public StudentResponse1(String status) {
         this.status = status;
     }
-
-    public void setResponse(String s) {
-    }
 }
-
-
-
-

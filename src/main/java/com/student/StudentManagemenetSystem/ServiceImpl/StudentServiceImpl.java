@@ -93,4 +93,15 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    @Override
+    public StudentDto getStudentById(int id) {
+        Optional<Student> byId = studentRepository.findById(id);
+        if (byId.isEmpty()){
+            throw new UserNotFoundbyIdException("user not found by id");
+        }else {
+            StudentDto studentDto = new StudentDto(byId.get());
+            return studentDto;
+        }
+    }
+
 }
