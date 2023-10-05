@@ -7,6 +7,7 @@ import com.student.StudentManagemenetSystem.Exception.UserAlreadyExistException;
 import com.student.StudentManagemenetSystem.Exception.UserNotFoundByEmailException;
 import com.student.StudentManagemenetSystem.Exception.UserNotFoundbyIdException;
 import com.student.StudentManagemenetSystem.Exception.somethingWentWrongException;
+import com.student.StudentManagemenetSystem.Response.DUserResponse;
 import com.student.StudentManagemenetSystem.Response.UserResponse;
 import com.student.StudentManagemenetSystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,16 @@ public class UserController {
             UserResponse userResponse =new UserResponse("Unsuccess");
             userResponse.setException(String.valueOf(e));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userResponse);
+        }
+    }
+
+    @DeleteMapping("/deleteUser")
+    public ResponseEntity<?> deleteUser(@RequestParam int id){
+        try {
+            String string = userService.deleteUserById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new DUserResponse("success", string));
+        } catch (UserNotFoundbyIdException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new DUserResponse("unsuccess","user not found"));
         }
     }
 

@@ -47,6 +47,16 @@ public class UserServiceImpl implements UserService {
         return new UserDto(byEmail);
     }
 
+    @Override
+    public String deleteUserById(int id) {
+        Optional<User> byId = userRepository.findById(id);
+        if (byId == null){
+            throw new UserNotFoundbyIdException("id not found" + id);
+        }
+        userRepository.deleteById(id);
+        return "user deleted successfully"+ id;
+    }
+
 
 //    @Override
 //    public UserDto getUserById(int id) {

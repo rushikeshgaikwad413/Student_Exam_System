@@ -7,6 +7,7 @@ import lombok.Data;
 public class StudentUpdateResponse {
 
     private String message;
+    private String status;
     private String exception;
     private StudentDto response;
 

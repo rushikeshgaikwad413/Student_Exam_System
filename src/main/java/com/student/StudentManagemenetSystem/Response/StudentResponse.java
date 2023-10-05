@@ -19,6 +19,7 @@ public class StudentResponse {
         this.status = status;
     }
 
+
     public void setResponse(String s) {
     }
 }
