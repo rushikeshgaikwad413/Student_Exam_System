@@ -26,6 +26,9 @@ public class Exam {
     private String option4;
     private String answer;
 
+    public Exam() {
+    }
+
     public Exam(ExamDto examDto) {
         this.question=examDto.getQuestion();
         this.option1=examDto.getOption1();
