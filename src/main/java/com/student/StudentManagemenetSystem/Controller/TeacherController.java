@@ -51,15 +51,17 @@ public class TeacherController {
             TeacherResponse teacherResponse = new TeacherResponse("unsuccessful");
             teacherResponse.setException(String.valueOf(e));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(teacherResponse);
+
         }
     }
 
     @PatchMapping("/updateTeacher")
     public ResponseEntity<?> updateTeacher (@RequestBody TeacherDto teacherDto){
+
         try{
             TeacherDto teacherDto1 = teacherService.updateTeacherById(teacherDto);
             TeacherUpdateResponse teacherUpdateResponse= new TeacherUpdateResponse("Success");
-            teacherUpdateResponse.setStatus("true");
+            teacherUpdateResponse.setStatus("successfull teacher update");
             teacherUpdateResponse.setResponse(teacherDto1);
             return ResponseEntity.status(HttpStatus.OK).body(teacherUpdateResponse);
         } catch (TeachernotFoundUpdateIdException e) {

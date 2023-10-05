@@ -15,6 +15,4 @@ public interface StudentService {
     StudentDto updateStudent(StudentDto studentDto);
 
     StudentDto getStudentByEmail(String email);
-
-    StudentDto getStudentById(int id);
 }
