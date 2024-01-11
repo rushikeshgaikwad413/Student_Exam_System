@@ -19,12 +19,12 @@ public class TeacherController {
     TeacherService teacherService;
 
     @PostMapping("/addTeacher")
-    public ResponseEntity<?> addTeacher (@RequestBody TeacherDto teacherDto){
-        try{
+    public ResponseEntity<String> addTeacher(@RequestBody TeacherDto teacherDto) {
+        try {
             teacherService.addTeacher(teacherDto);
-            return ResponseEntity.status(HttpStatus.OK).body("Sucessful");
+            return ResponseEntity.status(HttpStatus.OK).body("Teacher saved successfully");
         } catch (TeacherAllReadyExistException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Already Exist");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Teacher already exists");
         }
     }
 

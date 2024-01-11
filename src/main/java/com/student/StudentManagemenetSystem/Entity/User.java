@@ -1,13 +1,12 @@
 package com.student.StudentManagemenetSystem.Entity;
 
 import com.student.StudentManagemenetSystem.Dto.UserDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -21,6 +20,9 @@ public class User {
 
     private String email;
     private String password;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Admin> admins;
 
     public User() {
     }
