@@ -1,13 +1,12 @@
 package com.student.StudentManagemenetSystem.Entity;
 
 import com.student.StudentManagemenetSystem.Dto.AdminDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -21,6 +20,11 @@ public class Admin {
 
     private String name;
     private String email;
+
+    @ManyToMany
+    @JoinTable(name= "Admin_user", joinColumns = {@JoinColumn(name="id"  )}, inverseJoinColumns = {@JoinColumn(name = "Aid")})
+    private List<User> users;
+
 
 
     public Admin() {

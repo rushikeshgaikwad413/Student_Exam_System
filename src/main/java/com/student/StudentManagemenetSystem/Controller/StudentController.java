@@ -19,16 +19,17 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping("/addStudent")
-    public ResponseEntity<?> addStudent(@RequestBody StudentDto studentDto){
+    public ResponseEntity<String> addStudent(@RequestBody StudentDto studentDto) {
         try {
-            String string = studentService.addStudent(studentDto);
-            return ResponseEntity.status(HttpStatus.OK).body(string);
-        }catch (UserAlreadyExistException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Student Already Exist");
-        }catch (StudentNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Teacher Found");
+            String response = studentService.addStudent(studentDto);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (UserAlreadyExistException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Student already exists");
+        } catch (TeacherNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Teacher not found");
         }
     }
+
 
     @GetMapping("/getByid")
     public ResponseEntity<?> getStudentById (@RequestParam int id){

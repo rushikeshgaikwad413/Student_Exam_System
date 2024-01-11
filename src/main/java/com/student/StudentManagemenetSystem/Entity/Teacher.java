@@ -30,7 +30,6 @@ public class Teacher {
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     private List<Student> studentList=new ArrayList<>();
 
-
     public Teacher(TeacherDto teacherDto) {
         this.name= teacherDto.getName();
         this.email=teacherDto.getEmail();

@@ -33,6 +33,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     }
 
+
     @Override
     public TeacherDto getById(int id) {
         Optional<Teacher> byId = teacherRepository.findById(id);

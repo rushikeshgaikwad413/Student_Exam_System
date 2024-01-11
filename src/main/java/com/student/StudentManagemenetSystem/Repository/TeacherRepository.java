@@ -9,4 +9,5 @@ public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
     Teacher findByEmail(String email);
 
     Teacher findBySub(String sub);
+
 }
