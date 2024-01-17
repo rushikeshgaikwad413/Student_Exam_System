@@ -1,88 +1,60 @@
 package com.student.StudentManagemenetSystem.Controller;
 
-import com.student.StudentManagemenetSystem.Dto.StudentDto;
-import com.student.StudentManagemenetSystem.Dto.UserDto;
-import com.student.StudentManagemenetSystem.Entity.User;
-import com.student.StudentManagemenetSystem.Exception.UserAlreadyExistException;
-import com.student.StudentManagemenetSystem.Exception.UserNotFoundByEmailException;
-import com.student.StudentManagemenetSystem.Exception.UserNotFoundbyIdException;
-import com.student.StudentManagemenetSystem.Exception.somethingWentWrongException;
-import com.student.StudentManagemenetSystem.Response.DUserResponse;
-import com.student.StudentManagemenetSystem.Response.UserResponse;
-import com.student.StudentManagemenetSystem.Service.UserService;
+
+import com.student.StudentManagemenetSystem.Entity.AuthRequest;
+import com.student.StudentManagemenetSystem.Entity.UserInfo;
+import com.student.StudentManagemenetSystem.ServiceImpl.JWT.JwtService;
+import com.student.StudentManagemenetSystem.ServiceImpl.JWT.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth")
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserInfoService userInfoService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtService jwtService;
+
+    @GetMapping("/welcome")
+    public String welcome(){
+        return "Welcome to Spring Security tutorials !!";
+    }
 
     @PostMapping("/addUser")
-    public ResponseEntity<?> addUser(@RequestBody UserDto userDto) {
-        try {
-            String string = userService.addUser(userDto);
-            return ResponseEntity.status(HttpStatus.OK).body(string);
-        } catch (UserAlreadyExistException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("user Already Exist");
+    public String addUser(@RequestBody UserInfo userInfo){
+        return userInfoService.addUser(userInfo);
+
+    }
+    @PostMapping("/login")
+    public String addUser(@RequestBody AuthRequest authRequest){
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword()));
+        if(authenticate.isAuthenticated()){
+            return jwtService.generateToken(authRequest.getUserName());
+        }else {
+            throw new UsernameNotFoundException("Invalid user request");
         }
     }
-
-//    @GetMapping("/getUserbyid")
-//    public ResponseEntity<?> getUserById(@RequestParam int id){
-//        try {
-//            UserResponse userResponse = new UserResponse("successful");
-//            userResponse.setResponse(userService.getUserById(id));
-//            return ResponseEntity.status(HttpStatus.OK).body(userResponse);
-//        } catch (UserNotFoundbyIdException e) {
-//            UserResponse userResponse = new UserResponse("unsuccessful");
-//            userResponse.setException(String.valueOf(e));
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userResponse);
-//        }
-//    }
-
-
-
-
-    @GetMapping("/getUserbyid")
-    public ResponseEntity<?> getUserbyid(@RequestParam int id){
-        try {
-            UserResponse userResponse = new UserResponse("success");
-            userResponse.setResponse(userService.getUserById(id));
-            return ResponseEntity.status(HttpStatus.OK).body(userResponse);
-
-        }catch (UserNotFoundbyIdException e){
-            UserResponse userResponse = new UserResponse("unsuccess");
-            userResponse.setException(String.valueOf(e));
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userResponse);
-        }
+    @GetMapping("/getUsers")
+    @PreAuthorize("hasAuthority('ADMIN_ROLES')")
+    public List<UserInfo> getAllUsers(){
+        return userInfoService.getAllUser();
     }
-
-    @GetMapping("/getUserByEmail")
-    public ResponseEntity<?> findUserByEmail(@RequestParam String email){
-        try {
-            UserResponse userResponse = new UserResponse("success");
-            userResponse.setResponse(userService.getUserByEmail(email));
-            return ResponseEntity.status(HttpStatus.OK).body(userResponse);
-        } catch (UserNotFoundByEmailException e) {
-            UserResponse userResponse =new UserResponse("Unsuccess");
-            userResponse.setException(String.valueOf(e));
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userResponse);
-        }
-    }
-
-    @DeleteMapping("/deleteUser")
-    public ResponseEntity<?> deleteUser(@RequestParam int id){
-        try {
-            String string = userService.deleteUserById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(new DUserResponse("success", string));
-        } catch (UserNotFoundbyIdException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new DUserResponse("unsuccess","user not found"));
-        }
+    @GetMapping("/getUsers/{id}")
+    @PreAuthorize("hasAuthority('USER_ROLES')")
+    public UserInfo getAllUsers(@PathVariable Integer id){
+        return userInfoService.getUser(id);
     }
 
 }
